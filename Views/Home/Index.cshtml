@@ -1,0 +1,274 @@
+@{
+    ViewData["Title"] = "Ticket Analysis";
+}
+
+<div class="container mt-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold mb-3">Ticket Analysis AI</h1>
+            <p class="lead">Transform your tickets into actionable insights with AI-powered analysis</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        <i class="fas fa-edit me-2"></i>
+                        Enter Ticket Content
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="ticketForm">
+                        <div class="form-group">
+                            <label for="ticketContent" class="form-label">Ticket Description</label>
+                            <textarea id="ticketContent" class="form-control" rows="8" 
+                                    placeholder="Describe your ticket here..."></textarea>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary" id="analyzeButton">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                <span class="button-text">
+                                    <i class="fas fa-magic me-2"></i>
+                                    Analyze Ticket
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Analysis Results
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="results">
+                        <div class="text-center py-5">
+                            <i class="fas fa-robot mb-4 text-muted" style="font-size: 3rem;"></i>
+                            <h5 class="text-muted mb-3">AI Assistant Ready</h5>
+                            <p class="text-muted">Enter your ticket content and click analyze to see the magic happen</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            const analyzeButton = $('#analyzeButton');
+            const spinner = analyzeButton.find('.spinner-border');
+            const buttonText = analyzeButton.find('.button-text');
+            
+            $('#ticketForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const content = $('#ticketContent').val();
+                if (!content.trim()) {
+                    showError('Please enter ticket content before analyzing.');
+                    return;
+                }
+                
+                // Show loading states
+                spinner.removeClass('d-none');
+                buttonText.html('<i class="fas fa-cog fa-spin me-2"></i>Analyzing...');
+                analyzeButton.prop('disabled', true);
+                
+                $.ajax({
+                    url: '/Home/AnalyzeTicket',
+                    type: 'POST',
+                    data: { ticketContent: content },
+                    success: function(response) {
+                        const resultsHtml = `
+                            <div class="analysis-section">
+                                <h6 class="section-title">
+                                    <i class="fas fa-search me-2"></i>
+                                    Analysis Results
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">
+                                                    <i class="fas fa-tag me-2"></i>
+                                                    Category
+                                                </h6>
+                                                <p class="card-text">${response.analysis.category}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">
+                                                    <i class="fas fa-flag me-2"></i>
+                                                    Priority
+                                                </h6>
+                                                <p class="card-text">
+                                                    <span class="badge bg-${getPriorityColor(response.analysis.priority)}">
+                                                        ${response.analysis.priority}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">
+                                                    <i class="fas fa-key me-2"></i>
+                                                    Keywords
+                                                </h6>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    ${response.analysis.keywords.map(keyword => 
+                                                        `<span class="badge bg-secondary">
+                                                            <i class="fas fa-hashtag me-1"></i>
+                                                            ${keyword}
+                                                        </span>`
+                                                    ).join('')}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">
+                                                    <i class="fas fa-align-left me-2"></i>
+                                                    Summary
+                                                </h6>
+                                                <p class="card-text">${response.analysis.summary}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendations-section mt-4">
+                                <h6 class="section-title">
+                                    <i class="fas fa-lightbulb me-2"></i>
+                                    AI Recommendations
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">
+                                                    <i class="fas fa-tasks me-2"></i>
+                                                    Action Items
+                                                </h6>
+                                                <ul class="list-group list-group-flush">
+                                                    ${response.recommendations.suggestedActions.map(action => 
+                                                        `<li class="list-group-item">
+                                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                                            ${action}
+                                                        </li>`
+                                                    ).join('')}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">
+                                                    <i class="fas fa-tags me-2"></i>
+                                                    Labels
+                                                </h6>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    ${response.recommendations.suggestedLabels.map(label => 
+                                                        `<span class="badge bg-info">
+                                                            <i class="fas fa-tag me-1"></i>
+                                                            ${label}
+                                                        </span>`
+                                                    ).join('')}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">
+                                                    <i class="fas fa-clock me-2"></i>
+                                                    Estimated Time
+                                                </h6>
+                                                <p class="card-text">
+                                                    <i class="fas fa-hourglass-half text-warning me-2"></i>
+                                                    ${response.recommendations.estimatedResolutionTime}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="assignees-section mt-4">
+                                <h6 class="section-title">
+                                    <i class="fas fa-users me-2"></i>
+                                    Team Assignment
+                                </h6>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap gap-2">
+                                            ${response.assignees.map(assignee => 
+                                                `<span class="badge bg-primary">
+                                                    <i class="fas fa-user-circle me-1"></i>
+                                                    ${assignee}
+                                                </span>`
+                                            ).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        $('#results').html(resultsHtml);
+                    },
+                    error: function(xhr) {
+                        showError(xhr.responseText || 'An error occurred while analyzing the ticket.');
+                    },
+                    complete: function() {
+                        // Reset loading states
+                        spinner.addClass('d-none');
+                        buttonText.html('<i class="fas fa-magic me-2"></i>Analyze Ticket');
+                        analyzeButton.prop('disabled', false);
+                    }
+                });
+            });
+            
+            function showError(message) {
+                $('#results').html(`
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        ${message}
+                    </div>
+                `);
+            }
+        });
+
+        function getPriorityColor(priority) {
+            switch(priority.toLowerCase()) {
+                case 'critical':
+                    return 'danger';
+                case 'high':
+                    return 'warning';
+                case 'medium':
+                    return 'info';
+                case 'low':
+                    return 'success';
+                default:
+                    return 'secondary';
+            }
+        }
+    </script>
+} 

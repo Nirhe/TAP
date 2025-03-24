@@ -1,0 +1,6 @@
+@TAP_HostAddress = http://localhost:5081
+
+GET {{TAP_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

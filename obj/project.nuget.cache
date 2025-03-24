@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "UGG48WNTAnQ=",
+  "success": true,
+  "projectFilePath": "C:\\dev\\TAP\\TAP\\TAP.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\NirHeifetz\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.3\\microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
+    "C:\\Users\\NirHeifetz\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

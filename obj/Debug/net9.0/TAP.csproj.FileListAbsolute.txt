@@ -34,5 +34,6 @@ c:\dev\TAP\TAP\obj\Debug\net9.0\ref\TAP.dll
 C:\dev\TAP\TAP\obj\Debug\net9.0\TAP.RazorAssemblyInfo.cache
 C:\dev\TAP\TAP\obj\Debug\net9.0\TAP.RazorAssemblyInfo.cs
 C:\dev\TAP\TAP\bin\Debug\net9.0\TAP.staticwebassets.runtime.json
-C:\dev\TAP\TAP\obj\Debug\net9.0\compressed\mzkve45k8h-x8juehwboc.gz
-C:\dev\TAP\TAP\obj\Debug\net9.0\compressed\0nkwj2780n-116l1dkpom.gz
+C:\dev\TAP\TAP\obj\Debug\net9.0\TAP.sourcelink.json
+C:\dev\TAP\TAP\obj\Debug\net9.0\compressed\mzkve45k8h-vmjgacqd6b.gz
+C:\dev\TAP\TAP\obj\Debug\net9.0\compressed\0nkwj2780n-3qqm0q1zmj.gz

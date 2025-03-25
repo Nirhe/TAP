@@ -36,4 +36,7 @@ C:\dev\TAP\TAP\obj\Debug\net9.0\TAP.RazorAssemblyInfo.cs
 C:\dev\TAP\TAP\bin\Debug\net9.0\TAP.staticwebassets.runtime.json
 C:\dev\TAP\TAP\obj\Debug\net9.0\TAP.sourcelink.json
 C:\dev\TAP\TAP\obj\Debug\net9.0\compressed\mzkve45k8h-vmjgacqd6b.gz
-C:\dev\TAP\TAP\obj\Debug\net9.0\compressed\0nkwj2780n-3qqm0q1zmj.gz
+C:\dev\TAP\TAP\obj\Debug\net9.0\compressed\0nkwj2780n-skgwshifro.gz
+C:\dev\TAP\TAP\bin\Debug\net9.0\clientapp\package-lock.json
+C:\dev\TAP\TAP\bin\Debug\net9.0\clientapp\package.json
+C:\dev\TAP\TAP\bin\Debug\net9.0\clientapp\public\manifest.json
